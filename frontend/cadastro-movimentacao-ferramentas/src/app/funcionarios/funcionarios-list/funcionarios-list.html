@@ -1,0 +1,109 @@
+<mat-card class="people-card">
+  <mat-card-header class="card-header-actions">
+    <div>
+      <mat-card-title>Funcionários Cadastrados</mat-card-title>
+      <mat-card-subtitle>{{ funcionarios.length }} colaborador(es) no sistema</mat-card-subtitle>
+    </div>
+    <div class="header-right-actions">
+      @if (funcionarios.length > 0) {
+        <div class="search-input-box">
+          <mat-icon>search</mat-icon>
+          <input type="text" [(ngModel)]="filtroTexto" placeholder="Buscar funcionário..." />
+        </div>
+      }
+      <button mat-flat-button color="primary" class="new-btn" (click)="abrirNovoFuncionarioModal()">
+        <mat-icon>person_add</mat-icon> Novo Funcionário
+      </button>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (carregando) {
+      <div class="loading"><mat-spinner diameter="34"></mat-spinner></div>
+    } @else if (funcionarios.length === 0) {
+      <div class="empty-box">
+        <mat-icon>group_off</mat-icon>
+        <p>Nenhum funcionário cadastrado no momento.</p>
+        <button mat-flat-button color="primary" (click)="abrirNovoFuncionarioModal()">
+          <mat-icon>person_add</mat-icon> Cadastrar Primeiro Funcionário
+        </button>
+      </div>
+    } @else if (funcionariosFiltrados.length === 0) {
+      <p class="empty">Nenhum funcionário encontrado para "{{ filtroTexto }}".</p>
+    } @else {
+      <div class="people-grid">
+        @for (funcionario of funcionariosFiltrados; track funcionario.id) {
+          <div class="person" (click)="abrirHistorico(funcionario)" [title]="'Clique para ver o histórico de ' + funcionario.nomeFuncionario">
+            <div class="person-top-bar">
+              <div class="person-icon-wrap">
+                <mat-icon>person</mat-icon>
+              </div>
+              <div class="person-quick-actions">
+                <button mat-icon-button class="action-edit" (click)="abrirEditarFuncionarioModal($event, funcionario)" title="Editar funcionário">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button class="action-delete" (click)="excluirFuncionario($event, funcionario)" title="Excluir funcionário">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div class="person-info">
+              <strong>{{ funcionario.nomeFuncionario }}</strong>
+              <small>{{ funcionario.cargo }}</small>
+              <div class="person-badge" [class.has-active]="getItensAtivosCount(funcionario.id) > 0">
+                <mat-icon>{{ getItensAtivosCount(funcionario.id) > 0 ? 'inventory_2' : 'check_circle_outline' }}</mat-icon>
+                <span>{{ getItensAtivosCount(funcionario.id) > 0 ? getItensAtivosCount(funcionario.id) + ' item(ns) retido(s)' : 'Sem pendências' }}</span>
+              </div>
+            </div>
+
+            <div class="person-footer-click">
+              <span>Ver histórico completo</span>
+              <mat-icon>history</mat-icon>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="movement-card">
+  <mat-card-header class="card-header-actions">
+    <div>
+      <mat-card-title>Movimentações e Devoluções</mat-card-title>
+      <mat-card-subtitle>Histórico geral de retiradas e devoluções</mat-card-subtitle>
+    </div>
+    <button mat-flat-button color="accent" class="checkout-btn" (click)="abrirRetiradaModal()">
+      <mat-icon>assignment_turned_in</mat-icon> Registrar Nova Retirada
+    </button>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (retiradas.length === 0) {
+      <p class="empty">Nenhuma movimentação registrada.</p>
+    } @else {
+      <div class="movement-list">
+        @for (retirada of retiradas; track retirada.id) {
+          <div class="movement">
+            <div class="movement-info">
+              <strong>{{ retirada.peca.nomePeca }}</strong>
+              <small>{{ retirada.funcionario.nomeFuncionario }} · Retirado em {{ retirada.dataHoraRetirada }}</small>
+              @if (retirada.dataHoraDevolucao) {
+                <small class="return-time">Devolvida em {{ retirada.dataHoraDevolucao }}</small>
+              }
+            </div>
+
+            @if (emUso(retirada)) {
+              <button mat-stroked-button color="primary" (click)="devolver(retirada)">
+                <mat-icon>assignment_return</mat-icon> Devolver
+              </button>
+            } @else {
+              <span class="returned">Devolvida</span>
+            }
+          </div>
+        }
+      </div>
+    }
+  </mat-card-content>
+</mat-card>

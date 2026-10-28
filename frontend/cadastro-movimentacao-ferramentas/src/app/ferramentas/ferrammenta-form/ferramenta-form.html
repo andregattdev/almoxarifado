@@ -1,0 +1,47 @@
+<mat-card class="form-card">
+  <mat-card-header>
+    <mat-card-title>{{ ferramenta ? 'Editar ferramenta' : 'Nova ferramenta' }}</mat-card-title>
+    <mat-card-subtitle>Cadastre os dados básicos da peça</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="formulario" (ngSubmit)="salvar()">
+      <div class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome da ferramenta</mat-label>
+          <input matInput formControlName="nomePeca" placeholder="Ex.: Chave de impacto">
+          @if (formulario.controls.nomePeca.hasError('required')) {
+            <mat-error>Informe o nome da ferramenta.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Código</mat-label>
+          <input matInput formControlName="codigo" placeholder="Ex.: FER-001">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Estoque</mat-label>
+          <input matInput type="number" min="0" formControlName="estoque">
+          @if (formulario.controls.estoque.hasError('min')) {
+            <mat-error>O estoque não pode ser negativo.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="wide-field">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput rows="3" formControlName="descricaoPeca" placeholder="Detalhes para identificação"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        @if (ferramenta) {
+          <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        }
+        <button mat-flat-button color="primary" type="submit" [disabled]="salvando">
+          @if (salvando) { <mat-spinner diameter="20"></mat-spinner> } @else { {{ ferramenta ? 'Salvar alterações' : 'Cadastrar ferramenta' }} }
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

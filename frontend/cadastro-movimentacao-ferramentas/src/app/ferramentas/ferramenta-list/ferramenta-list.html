@@ -1,0 +1,80 @@
+<mat-card class="list-card">
+  <mat-card-header class="card-header-actions">
+    <div>
+      <mat-card-title>Ferramentas & Peças Cadastradas</mat-card-title>
+      <mat-card-subtitle>{{ pecas.length }} {{ pecas.length === 1 ? 'item disponível' : 'itens disponíveis no inventário' }}</mat-card-subtitle>
+    </div>
+    <div class="header-right-actions">
+      @if (pecas.length > 0) {
+        <div class="search-input-box">
+          <mat-icon>search</mat-icon>
+          <input type="text" [(ngModel)]="filtroTexto" placeholder="Buscar ferramenta..." />
+        </div>
+      }
+      <button mat-flat-button color="primary" class="new-btn" (click)="abrirNovaFerramentaModal()">
+        <mat-icon>construction</mat-icon> Nova Ferramenta
+      </button>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (carregando) {
+      <div class="loading"><mat-spinner diameter="36"></mat-spinner></div>
+    } @else if (erroCarregamento) {
+      <div class="empty-state">
+        <mat-icon>cloud_off</mat-icon>
+        <p>Não foi possível carregar as ferramentas.</p>
+        <button mat-stroked-button color="primary" (click)="carregar()">Tentar novamente</button>
+      </div>
+    } @else if (pecas.length === 0) {
+      <div class="empty-state">
+        <mat-icon>inventory_2</mat-icon>
+        <p>Nenhuma ferramenta cadastrada no momento.</p>
+        <button mat-flat-button color="primary" (click)="abrirNovaFerramentaModal()">
+          <mat-icon>construction</mat-icon> Cadastrar Primeira Ferramenta
+        </button>
+      </div>
+    } @else if (pecasFiltradas.length === 0) {
+      <p class="empty-search">Nenhuma ferramenta encontrada para "{{ filtroTexto }}".</p>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Ferramenta / Descrição</th>
+              <th>Código</th>
+              <th>Estoque</th>
+              <th class="actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (peca of pecasFiltradas; track peca.id) {
+              <tr>
+                <td>
+                  <strong>{{ peca.nomePeca }}</strong>
+                  <small>{{ peca.descricaoPeca || 'Sem descrição cadastrada' }}</small>
+                </td>
+                <td>
+                  <span class="code-tag">{{ peca.codigo || '—' }}</span>
+                </td>
+                <td>
+                  <span class="stock-badge" [class.low-stock]="(peca.estoque ?? 0) === 0">
+                    {{ peca.estoque ?? 0 }} unid.
+                  </span>
+                </td>
+                <td class="actions">
+                  <button mat-icon-button class="action-edit" title="Editar ferramenta" (click)="abrirEditarFerramentaModal(peca)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button class="action-delete" title="Excluir ferramenta" (click)="excluir(peca)">
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </mat-card-content>
+</mat-card>

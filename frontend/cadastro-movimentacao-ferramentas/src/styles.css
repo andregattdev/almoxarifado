@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+:root { font-family: 'DM Sans', sans-serif; color: #17251e; background: #f3f5f0; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+.app-header { display: flex; align-items: center; gap: 14px; padding: 30px max(24px, calc((100% - 1120px) / 2)); color: #f6f7f2; background: #173c32; }
+.brand-mark { display: grid; place-items: center; width: 48px; height: 48px; color: #173c32; background: #d3e86a; border-radius: 12px; }
+.eyebrow { display: block; color: #a8c4b8; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+h1 { margin: 3px 0 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px; }
+.app-content { display: grid; gap: 24px; width: min(1120px, calc(100% - 48px)); margin: 32px auto 56px; }
+@media (min-width: 850px) { .app-content { grid-template-columns: minmax(320px, .8fr) minmax(0, 1.4fr); align-items: start; } }

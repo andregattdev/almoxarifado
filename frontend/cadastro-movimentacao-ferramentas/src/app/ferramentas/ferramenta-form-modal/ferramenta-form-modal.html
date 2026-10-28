@@ -1,0 +1,55 @@
+<div class="modal-card">
+  <div class="modal-header">
+    <div class="header-title">
+      <div class="header-icon">
+        <mat-icon>{{ ferramenta?.id ? 'edit_note' : 'construction' }}</mat-icon>
+      </div>
+      <div>
+        <h2 mat-dialog-title>{{ ferramenta?.id ? 'Editar Ferramenta' : 'Nova Ferramenta' }}</h2>
+        <span class="header-subtitle">{{ ferramenta?.id ? 'Altere as informações do item no inventário' : 'Preencha os dados para registrar no estoque' }}</span>
+      </div>
+    </div>
+    <button mat-icon-button class="close-btn" (click)="fechar()" aria-label="Fechar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="formulario" (ngSubmit)="salvar()">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-2">
+          <mat-label>Nome da Ferramenta / Peça</mat-label>
+          <input matInput formControlName="nomePeca" placeholder="Ex.: Chave de Fenda Phillips 1/4" />
+          @if (formulario.controls.nomePeca.hasError('required')) {
+            <mat-error>Informe o nome da ferramenta.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="flex-1">
+          <mat-label>Código / Patrimônio</mat-label>
+          <input matInput formControlName="codigo" placeholder="Ex.: FER-001" />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descrição / Observações Técnicas</mat-label>
+        <textarea matInput formControlName="descricaoPeca" rows="3" placeholder="Insira detalhes técnicos ou estado da ferramenta..."></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Quantidade em Estoque</mat-label>
+        <input matInput type="number" formControlName="estoque" placeholder="0" min="0" />
+        @if (formulario.controls.estoque.hasError('required') || formulario.controls.estoque.hasError('min')) {
+          <mat-error>Informe uma quantidade válida igual ou superior a 0.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="modal-actions">
+        <button mat-stroked-button type="button" (click)="fechar()" [disabled]="salvando">Cancelar</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="salvando">
+          {{ salvando ? 'Salvando...' : (ferramenta?.id ? 'Salvar Alterações' : 'Cadastrar Ferramenta') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

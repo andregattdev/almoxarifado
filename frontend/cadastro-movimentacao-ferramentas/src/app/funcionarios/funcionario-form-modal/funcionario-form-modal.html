@@ -1,0 +1,43 @@
+<div class="modal-card">
+  <div class="modal-header">
+    <div class="header-title">
+      <div class="header-icon">
+        <mat-icon>{{ funcionario?.id ? 'manage_accounts' : 'person_add' }}</mat-icon>
+      </div>
+      <div>
+        <h2 mat-dialog-title>{{ funcionario?.id ? 'Editar Funcionário' : 'Novo Funcionário' }}</h2>
+        <span class="header-subtitle">{{ funcionario?.id ? 'Altere as informações do colaborador' : 'Preencha os dados para cadastrar na equipe' }}</span>
+      </div>
+    </div>
+    <button mat-icon-button class="close-btn" (click)="fechar()" aria-label="Fechar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="formulario" (ngSubmit)="salvar()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nome Completo</mat-label>
+        <input matInput formControlName="nomeFuncionario" placeholder="Ex.: Ana Souza" />
+        @if (formulario.controls.nomeFuncionario.hasError('required')) {
+          <mat-error>Informe o nome completo.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Cargo / Função</mat-label>
+        <input matInput formControlName="cargo" placeholder="Ex.: Técnica de Manutenção" />
+        @if (formulario.controls.cargo.hasError('required')) {
+          <mat-error>Informe o cargo do funcionário.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="modal-actions">
+        <button mat-stroked-button type="button" (click)="fechar()" [disabled]="salvando">Cancelar</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="salvando">
+          {{ salvando ? 'Salvando...' : (funcionario?.id ? 'Salvar Alterações' : 'Cadastrar Funcionário') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

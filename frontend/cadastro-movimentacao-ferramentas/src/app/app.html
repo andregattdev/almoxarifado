@@ -1,0 +1,138 @@
+<div class="app-shell">
+	<app-nav-lateral [secaoAtiva]="secaoAtiva" (secaoSelecionada)="selecionarSecao($event)"></app-nav-lateral>
+	<div class="page-area">
+		<header class="page-header">
+			<div>
+				<span class="eyebrow">Controle de inventário</span>
+				<h1>{{ secaoAtiva === 'inicio' ? 'Visão Geral e Operações' : secaoAtiva === 'ferramentas' ? 'Gestão de Ferramentas' : 'Gestão de Funcionários' }}</h1>
+			</div>
+			<div class="status"><span></span>Sistema operacional</div>
+		</header>
+
+		<main class="app-content">
+			@if (secaoAtiva === 'inicio') {
+				<!-- Dashboard Hero Banner -->
+				<section class="welcome-panel">
+					<div class="welcome-main">
+						<span class="eyebrow">Painel de Controle Toolbox</span>
+						<h2>Gestão inteligente do seu inventário.</h2>
+						<p>Cadastre ferramentas e colaboradores via modal, acompanhe movimentações e consulte o histórico detalhado por funcionário em tempo real.</p>
+					</div>
+
+					<div class="metrics-grid">
+						<div class="metric-card">
+							<div class="metric-icon"><mat-icon>build</mat-icon></div>
+							<div class="metric-info">
+								<strong>{{ totalFerramentas }}</strong>
+								<span>Ferramentas</span>
+							</div>
+						</div>
+						<div class="metric-card">
+							<div class="metric-icon"><mat-icon>groups</mat-icon></div>
+							<div class="metric-info">
+								<strong>{{ totalFuncionarios }}</strong>
+								<span>Funcionários</span>
+							</div>
+						</div>
+						<div class="metric-card highlight">
+							<div class="metric-icon"><mat-icon>pending_actions</mat-icon></div>
+							<div class="metric-info">
+								<strong>{{ retiradasAtivasCount }}</strong>
+								<span>Retiradas ativas</span>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Cards de Acesso aos Cadastros via Modal e Gestão -->
+				<section class="navigation-cards-section">
+					<div class="section-title-row">
+						<div>
+							<h2>Acesso Rápido a Cadastros & Operações</h2>
+							<p>Clique em um dos cards para abrir o cadastro por modal ou gerenciar a lista correspondente</p>
+						</div>
+					</div>
+
+					<div class="cards-grid">
+						<!-- Card 1: Cadastrar / Gerenciar Ferramentas -->
+						<div class="action-card card-tools" (click)="abrirModalNovaFerramenta()">
+							<div class="card-top">
+								<div class="card-icon"><mat-icon>construction</mat-icon></div>
+								<span class="card-badge">{{ totalFerramentas }} cadastradas</span>
+							</div>
+							<h3>Cadastrar Nova Ferramenta</h3>
+							<p>Abra a modal para cadastrar novas ferramentas, especificações técnicas e quantidade em estoque.</p>
+							<div class="card-footer">
+								<span>+ Nova Ferramenta (Modal)</span>
+								<mat-icon>open_in_new</mat-icon>
+							</div>
+						</div>
+
+						<!-- Card 2: Cadastrar / Gerenciar Funcionários -->
+						<div class="action-card card-people" (click)="abrirModalNovoFuncionario()">
+							<div class="card-top">
+								<div class="card-icon"><mat-icon>person_add</mat-icon></div>
+								<span class="card-badge">{{ totalFuncionarios }} cadastrados</span>
+							</div>
+							<h3>Cadastrar Novo Funcionário</h3>
+							<p>Abra a modal para cadastrar colaboradores com nome e cargo autorizados para saída de material.</p>
+							<div class="card-footer">
+								<span>+ Novo Funcionário (Modal)</span>
+								<mat-icon>open_in_new</mat-icon>
+							</div>
+						</div>
+
+						<!-- Card 3: Registrar Movimentação / Retirada -->
+						<div class="action-card card-checkout" (click)="abrirModalNovaRetirada()">
+							<div class="card-top">
+								<div class="card-icon"><mat-icon>assignment_turned_in</mat-icon></div>
+								<span class="card-badge active-tag">{{ retiradasAtivasCount }} em uso</span>
+							</div>
+							<h3>Registrar Retirada</h3>
+							<p>Abra a modal para vincular a saída de uma ferramenta a um funcionário com data e hora automatizadas.</p>
+							<div class="card-footer">
+								<span>Nova Retirada (Modal)</span>
+								<mat-icon>open_in_new</mat-icon>
+							</div>
+						</div>
+
+						<!-- Card 4: Histórico por Funcionário -->
+						<div class="action-card card-history" (click)="selecionarSecao('funcionarios')">
+							<div class="card-top">
+								<div class="card-icon"><mat-icon>history_edu</mat-icon></div>
+								<span class="card-badge">Clique nos quadrados</span>
+							</div>
+							<h3>Histórico de Funcionários</h3>
+							<p>Acesse o painel para clicar nos quadrados de cada funcionário e visualizar seu histórico completo de devoluções.</p>
+							<div class="card-footer">
+								<span>Acessar Painel</span>
+								<mat-icon>arrow_forward</mat-icon>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Quadrados de Funcionários em destaque na Home -->
+				<section class="home-funcionarios-section">
+					<div class="section-title-row">
+						<div>
+							<h2>Painel de Funcionários & Histórico Rápido</h2>
+							<p>Clique no quadrado para abrir a janela de histórico ou use o botão para cadastrar novo funcionário</p>
+						</div>
+						
+					</div>
+
+					<app-funcionarios-list [refreshKey]="funcionariosAtualizados"></app-funcionarios-list>
+				</section>
+			}
+
+			@if (secaoAtiva === 'ferramentas') {
+				<app-ferramenta-list [refreshKey]="listaAtualizada"></app-ferramenta-list>
+			}
+
+			@if (secaoAtiva === 'funcionarios') {
+				<app-funcionarios-list [refreshKey]="funcionariosAtualizados"></app-funcionarios-list>
+			}
+		</main>
+	</div>
+</div>

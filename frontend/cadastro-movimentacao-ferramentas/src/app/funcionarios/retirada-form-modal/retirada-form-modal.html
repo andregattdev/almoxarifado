@@ -1,0 +1,55 @@
+<div class="modal-card">
+  <div class="modal-header">
+    <div class="header-title">
+      <div class="header-icon">
+        <mat-icon>assignment_turned_in</mat-icon>
+      </div>
+      <div>
+        <h2 mat-dialog-title>Registrar Retirada</h2>
+        <span class="header-subtitle">Associe uma ferramenta ao funcionário responsável</span>
+      </div>
+    </div>
+    <button mat-icon-button class="close-btn" (click)="fechar()" aria-label="Fechar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="formulario" (ngSubmit)="registrar()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Funcionário Responsável</mat-label>
+        <mat-select formControlName="funcionarioId">
+          <mat-option [value]="0">Selecione um funcionário</mat-option>
+          @for (funcionario of funcionarios; track funcionario.id) {
+            <mat-option [value]="funcionario.id">{{ funcionario.nomeFuncionario }} ({{ funcionario.cargo }})</mat-option>
+          }
+        </mat-select>
+        @if (formulario.controls.funcionarioId.hasError('min')) {
+          <mat-error>Selecione o funcionário que vai retirar o item.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Ferramenta a ser Retirada</mat-label>
+        <mat-select formControlName="pecaId">
+          <mat-option [value]="0">Selecione uma ferramenta</mat-option>
+          @for (peca of pecas; track peca.id) {
+            <mat-option [value]="peca.id">
+              {{ peca.nomePeca }} {{ peca.codigo ? ' (' + peca.codigo + ')' : '' }} - Est: {{ peca.estoque ?? 0 }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (formulario.controls.pecaId.hasError('min')) {
+          <mat-error>Selecione a ferramenta a ser retirada.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="modal-actions">
+        <button mat-stroked-button type="button" (click)="fechar()" [disabled]="registrando">Cancelar</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="registrando || carregandoListas">
+          {{ registrando ? 'Registrando...' : 'Confirmar Retirada' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

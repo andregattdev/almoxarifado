@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ApiCadastroPecasEFerramentasApplication<api-cadastro-pecas-e-ferramentas>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.andregattermeyer.api_cadastro_pecas_e_ferramentas.ApiCadastroPecasEFerramentasApplication",
+            "projectName": "api-cadastro-pecas-e-ferramentas",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

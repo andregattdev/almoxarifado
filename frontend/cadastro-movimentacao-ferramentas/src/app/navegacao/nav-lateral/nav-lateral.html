@@ -1,0 +1,10 @@
+<aside class="sidebar">
+	<div class="sidebar-brand"><span class="brand-mark"><mat-icon>build</mat-icon></span><div><strong>Toolbox</strong><small>Inventário</small></div></div>
+	<nav aria-label="Navegação principal">
+		<span class="nav-label">Menu</span>
+		<button [class.active]="secaoAtiva === 'inicio'" (click)="selecionar('inicio')"><mat-icon>dashboard</mat-icon>Visão geral</button>
+		<button [class.active]="secaoAtiva === 'ferramentas'" (click)="selecionar('ferramentas')"><mat-icon>handyman</mat-icon>Ferramentas</button>
+		<button [class.active]="secaoAtiva === 'funcionarios'" (click)="selecionar('funcionarios')"><mat-icon>groups</mat-icon>Funcionários</button>
+	</nav>
+	<div class="sidebar-footer"><mat-icon>info</mat-icon><span>Controle de retiradas e devoluções</span></div>
+</aside>

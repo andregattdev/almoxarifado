@@ -1,0 +1,95 @@
+<div class="modal-container">
+  <div class="modal-header">
+    <div class="user-info">
+      <div class="user-avatar">
+        <mat-icon>person</mat-icon>
+      </div>
+      <div>
+        <h2 mat-dialog-title>{{ funcionario.nomeFuncionario }}</h2>
+        <span class="user-cargo">{{ funcionario.cargo }}</span>
+      </div>
+    </div>
+    <button mat-icon-button class="close-btn" (click)="fechar()" aria-label="Fechar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-card active-stat">
+      <span class="stat-value">{{ retiradasAtivas.length }}</span>
+      <span class="stat-label">Ferramentas em uso agora</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">{{ retiradas.length }}</span>
+      <span class="stat-label">Total de retiradas no histórico</span>
+    </div>
+  </div>
+
+  <div class="dialog-content">
+    @if (retiradasAtivas.length > 0) {
+      <div class="section-block active-section">
+        <h3><mat-icon>assignment_late</mat-icon> Ferramentas pendentes de devolução</h3>
+        <div class="active-list">
+          @for (item of retiradasAtivas; track item.id) {
+            <div class="active-item">
+              <div class="item-detail">
+                <strong>{{ item.peca.nomePeca }}</strong>
+                <small>Código: {{ item.peca.codigo || 'S/N' }} • Retirado em {{ item.dataHoraRetirada }}</small>
+              </div>
+              <button mat-flat-button class="devolver-btn" (click)="devolver(item)">
+                <mat-icon>assignment_return</mat-icon> Devolver
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="section-block">
+      <div class="section-header-flex">
+        <h3><mat-icon>history</mat-icon> Histórico completo de retiradas</h3>
+        @if (retiradas.length > 0) {
+          <div class="filter-box">
+            <mat-icon>search</mat-icon>
+            <input type="text" [(ngModel)]="filtroTexto" placeholder="Filtrar por ferramenta..." />
+          </div>
+        }
+      </div>
+
+      @if (retiradasFiltradas.length === 0) {
+        <p class="empty-msg">
+          @if (filtroTexto) { Nenhum registro encontrado para "{{ filtroTexto }}". }
+          @else { Nenhum histórico de movimentação registrado para este funcionário. }
+        </p>
+      } @else {
+        <div class="timeline-list">
+          @for (item of retiradasFiltradas; track item.id) {
+            <div class="timeline-item" [class.is-returned]="!!item.dataHoraDevolucao">
+              <div class="timeline-icon">
+                <mat-icon>{{ item.dataHoraDevolucao ? 'check_circle' : 'build_circle' }}</mat-icon>
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-title-row">
+                  <strong>{{ item.peca.nomePeca }}</strong>
+                  <span class="status-badge" [class.badge-active]="!item.dataHoraDevolucao" [class.badge-done]="!!item.dataHoraDevolucao">
+                    {{ item.dataHoraDevolucao ? 'Devolvida' : 'Em Uso' }}
+                  </span>
+                </div>
+                <div class="timeline-dates">
+                  <span><mat-icon>event</mat-icon> Retirada: {{ item.dataHoraRetirada }}</span>
+                  @if (item.dataHoraDevolucao) {
+                    <span><mat-icon>event_available</mat-icon> Devolução: {{ item.dataHoraDevolucao }}</span>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button mat-stroked-button (click)="fechar()">Fechar</button>
+  </div>
+</div>
